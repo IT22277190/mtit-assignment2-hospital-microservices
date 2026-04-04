@@ -167,6 +167,8 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     urls:
+      - name: All Services (Unified)
+        url: /v3/api-docs/all-services
       - name: Patient Service
         url: /patient-docs/api-docs
       - name: Doctor Service
