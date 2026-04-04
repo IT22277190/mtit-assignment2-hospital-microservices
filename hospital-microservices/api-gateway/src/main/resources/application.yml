@@ -7,9 +7,21 @@ spring:
 
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+
       routes:
 
-        # ─── Member 1: Patient Service ────────────────────────────────────────
+        # === PATIENT SERVICE ===
+        # Base path: GET list + POST create
+        - id: patient-service-base
+          uri: http://localhost:8081
+          predicates:
+            - Path=/gateway/patients,/gateway/patients/
+          filters:
+            - SetPath=/api/patients
+
+        # Sub-paths: GET by ID, PUT, DELETE, PATCH, search, etc.
         - id: patient-service
           uri: http://localhost:8081
           predicates:
@@ -17,7 +29,14 @@ spring:
           filters:
             - RewritePath=/gateway/patients/(?<segment>.*), /api/patients/${segment}
 
-        # ─── Member 2: Doctor Service ─────────────────────────────────────────
+        # === DOCTOR SERVICE ===
+        - id: doctor-service-base
+          uri: http://localhost:8082
+          predicates:
+            - Path=/gateway/doctors,/gateway/doctors/
+          filters:
+            - SetPath=/api/doctors
+
         - id: doctor-service
           uri: http://localhost:8082
           predicates:
@@ -25,7 +44,14 @@ spring:
           filters:
             - RewritePath=/gateway/doctors/(?<segment>.*), /api/doctors/${segment}
 
-        # ─── Member 3: Appointment Service ────────────────────────────────────
+        # === APPOINTMENT SERVICE ===
+        - id: appointment-service-base
+          uri: http://localhost:8083
+          predicates:
+            - Path=/gateway/appointments,/gateway/appointments/
+          filters:
+            - SetPath=/api/appointments
+
         - id: appointment-service
           uri: http://localhost:8083
           predicates:
@@ -33,7 +59,14 @@ spring:
           filters:
             - RewritePath=/gateway/appointments/(?<segment>.*), /api/appointments/${segment}
 
-        # ─── Member 4: Pharmacy Service ───────────────────────────────────────
+        # === PHARMACY SERVICE ===
+        - id: pharmacy-service-base
+          uri: http://localhost:8084
+          predicates:
+            - Path=/gateway/medicines,/gateway/medicines/
+          filters:
+            - SetPath=/api/medicines
+
         - id: pharmacy-service
           uri: http://localhost:8084
           predicates:
@@ -41,7 +74,14 @@ spring:
           filters:
             - RewritePath=/gateway/medicines/(?<segment>.*), /api/medicines/${segment}
 
-        # ─── Member 5: Billing Service ────────────────────────────────────────
+        # === BILLING SERVICE ===
+        - id: billing-service-base
+          uri: http://localhost:8085
+          predicates:
+            - Path=/gateway/invoices,/gateway/invoices/
+          filters:
+            - SetPath=/api/invoices
+
         - id: billing-service
           uri: http://localhost:8085
           predicates:
@@ -49,7 +89,14 @@ spring:
           filters:
             - RewritePath=/gateway/invoices/(?<segment>.*), /api/invoices/${segment}
 
-        # ─── Member 6: Lab Test Service ───────────────────────────────────────
+        # === LAB TEST SERVICE ===
+        - id: labtest-service-base
+          uri: http://localhost:8086
+          predicates:
+            - Path=/gateway/labtests,/gateway/labtests/
+          filters:
+            - SetPath=/api/labtests
+
         - id: labtest-service
           uri: http://localhost:8086
           predicates:
@@ -57,25 +104,7 @@ spring:
           filters:
             - RewritePath=/gateway/labtests/(?<segment>.*), /api/labtests/${segment}
 
-# SpringDoc / Swagger UI aggregated via gateway
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    urls:
-      - name: Patient Service
-        url: /patient-docs/api-docs
-      - name: Doctor Service
-        url: /doctor-docs/api-docs
-      - name: Appointment Service
-        url: /appointment-docs/api-docs
-      - name: Pharmacy Service
-        url: /pharmacy-docs/api-docs
-      - name: Billing Service
-        url: /billing-docs/api-docs
-      - name: Lab Test Service
-        url: /labtest-docs/api-docs
-
-        # ─── Swagger API-docs proxy routes ────────────────────────────────────
+        # === SWAGGER DOC PROXY ROUTES ===
         - id: patient-docs
           uri: http://localhost:8081
           predicates:
@@ -118,9 +147,7 @@ springdoc:
           filters:
             - RewritePath=/labtest-docs/(?<segment>.*), /${segment}
 
-  # CORS for React frontend on port 3000
-  cloud:
-    gateway:
+      # CORS for React frontend on port 3000
       globalcors:
         cors-configurations:
           '[/**]':
@@ -133,3 +160,22 @@ springdoc:
               - DELETE
               - OPTIONS
             allowedHeaders: "*"
+            allowCredentials: false
+
+# SpringDoc / Swagger UI aggregated via gateway
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Patient Service
+        url: /patient-docs/api-docs
+      - name: Doctor Service
+        url: /doctor-docs/api-docs
+      - name: Appointment Service
+        url: /appointment-docs/api-docs
+      - name: Pharmacy Service
+        url: /pharmacy-docs/api-docs
+      - name: Billing Service
+        url: /billing-docs/api-docs
+      - name: Lab Test Service
+        url: /labtest-docs/api-docs
