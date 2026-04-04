@@ -2,6 +2,7 @@ package com.hospital.labtest.controller;
 import com.hospital.labtest.model.LabTest;
 import com.hospital.labtest.service.LabTestService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -23,9 +24,14 @@ public class LabTestController {
     @PutMapping("/{id}") @Operation(summary="Update lab test")
     public ResponseEntity<LabTest> update(@PathVariable String id, @RequestBody LabTest t) {
         return svc.update(id, t).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()); }
-    @PatchMapping("/{id}/result") @Operation(summary="Submit result")
+    @PatchMapping("/{id}/result")
+    @Operation(summary="Submit result", description="Updates the lab test result. The `result` and `completedDate` query parameters are required; `notes` is optional.")
     public ResponseEntity<LabTest> submitResult(@PathVariable String id,
-            @RequestParam String result, @RequestParam(required=false) String notes,
+            @Parameter(description = "Final lab result", example = "Normal")
+            @RequestParam String result,
+            @Parameter(description = "Optional technician notes", example = "Sample processed successfully")
+            @RequestParam(required = false) String notes,
+            @Parameter(description = "Completion date in YYYY-MM-DD format", example = "2026-04-04")
             @RequestParam String completedDate) {
         return svc.updateResult(id, result, notes, completedDate)
                   .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()); }
