@@ -1,4 +1,4 @@
-const GATEWAY = "http://localhost:8080/gateway";
+const GATEWAY = "/gateway";
 const api = async (method, path, data = null) => {
   const options = { method, headers: { "Content-Type": "application/json" } };
   if (data) options.body = JSON.stringify(data);
