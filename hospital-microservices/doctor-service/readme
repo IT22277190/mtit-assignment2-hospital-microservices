@@ -1,1 +1,7 @@
-cd hospital-microservices/patient-service
+cd hospital-microservices/patient-service     && mvn spring-boot:run  # :8081
+cd hospital-microservices/doctor-service      && mvn spring-boot:run  # :8082
+cd hospital-microservices/appointment-service && mvn spring-boot:run  # :8083
+cd hospital-microservices/pharmacy-service    && mvn spring-boot:run  # :8084
+cd hospital-microservices/billing-service     && mvn spring-boot:run  # :8085
+cd hospital-microservices/labtest-service     && mvn spring-boot:run  # :8086
+cd hospital-microservices/api-gateway         && mvn spring-boot:run  # :8080 
