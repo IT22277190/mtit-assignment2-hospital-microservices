@@ -117,6 +117,8 @@ http://localhost:8080/swagger-ui.html
 
 Use the dropdown in the top-right corner to switch between services.
 
+The gateway serves each service docs URL through proxy routes such as `/patient-docs/api-docs` and `/labtest-docs/api-docs`, while runtime API calls go through `/gateway/<service>` routes.
+
 \---
 
 ## Gateway Route Examples
@@ -146,4 +148,6 @@ The API Gateway:
 * Handles **URL rewriting** transparently
 * Enables future addition of auth, rate limiting, logging at one place
 * Aggregates all **Swagger docs** under one UI
+
+Docker mode also centralizes MongoDB configuration with the root `.env` file and `MONGODB_URI_DOCKER`.
 

@@ -162,6 +162,15 @@ The following environment variables can be configured:
 | `SPRING_PROFILES_ACTIVE` | `docker` | Spring profile |
 | `SERVER_PORT` | Service-specific | Container port |
 | `BUILD_VERSION` | `1.0.0` | Build version |
+| `MONGODB_URI_DOCKER` | `mongodb://mongodb:27017` | Shared MongoDB URI for Dockerized backend services |
+
+### Shared `.env`
+
+The root [.env](.env) file keeps the MongoDB connection settings in one place:
+
+- `MONGODB_URI` is used by local/non-Docker Spring Boot runs.
+- `MONGODB_URI_DOCKER` is used by `docker-compose.yml` and falls back to the local MongoDB container.
+- Do not commit real Atlas credentials; keep them in `.env` only.
 
 ## Development
 
@@ -182,6 +191,18 @@ docker exec -it hms-mongodb mongosh
 use patientdb
 db.patients.find()
 ```
+
+## Swagger Through Docker Gateway
+
+Open `http://localhost:8080/swagger-ui.html` to use the aggregated Swagger UI.
+
+The dropdown entries point to gateway-proxied docs endpoints such as:
+- `/patient-docs/api-docs`
+- `/doctor-docs/api-docs`
+- `/appointment-docs/api-docs`
+- `/pharmacy-docs/api-docs`
+- `/billing-docs/api-docs`
+- `/labtest-docs/api-docs`
 
 ## Production Considerations
 
