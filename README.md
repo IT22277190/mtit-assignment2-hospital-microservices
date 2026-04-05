@@ -38,6 +38,11 @@
 - Docker Desktop installed and running
 - At least 4GB RAM allocated to Docker
 
+### Environment files
+- [.env](.env) stores shared MongoDB connection values for local development and Docker overrides.
+- Docker Compose uses `MONGODB_URI_DOCKER` if it is set, otherwise it falls back to the local container MongoDB instance.
+- Local Spring Boot runs use `MONGODB_URI` from `.env` in the service `application.properties` files.
+
 ### Run the entire stack
 ```bash
 # From the project root (where docker-compose.yml is)
@@ -71,6 +76,11 @@ docker-compose logs -f frontend
 | 💊 Pharmacy Service direct | http://localhost:8084/swagger-ui.html |
 | 🧾 Billing Service direct | http://localhost:8085/swagger-ui.html |
 | 🔬 Lab Test Service direct | http://localhost:8086/swagger-ui.html |
+
+### Swagger usage through the gateway
+- Use `http://localhost:8080/swagger-ui.html` to see the aggregated service docs.
+- Each service entry in the Swagger dropdown points to the gateway proxy routes such as `/patient-docs/api-docs` and `/labtest-docs/api-docs`.
+- The gateway also forwards live API calls like `/gateway/patients` and `/gateway/labtests` to the matching services.
 
 ---
 
