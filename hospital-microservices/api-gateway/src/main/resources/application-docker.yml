@@ -9,6 +9,13 @@ spring:
     gateway:
       routes:
         # ─── Member 1: Patient Service ────────────────────────────────────────
+        - id: patient-service-base
+          uri: http://patient-service:8081
+          predicates:
+            - Path=/gateway/patients,/gateway/patients/
+          filters:
+            - SetPath=/api/patients
+
         - id: patient-service
           uri: http://patient-service:8081
           predicates:
@@ -17,6 +24,13 @@ spring:
             - RewritePath=/gateway/patients/(?<segment>.*), /api/patients/${segment}
 
         # ─── Member 2: Doctor Service ─────────────────────────────────────────
+        - id: doctor-service-base
+          uri: http://doctor-service:8082
+          predicates:
+            - Path=/gateway/doctors,/gateway/doctors/
+          filters:
+            - SetPath=/api/doctors
+
         - id: doctor-service
           uri: http://doctor-service:8082
           predicates:
@@ -25,6 +39,13 @@ spring:
             - RewritePath=/gateway/doctors/(?<segment>.*), /api/doctors/${segment}
 
         # ─── Member 3: Appointment Service ────────────────────────────────────
+        - id: appointment-service-base
+          uri: http://appointment-service:8083
+          predicates:
+            - Path=/gateway/appointments,/gateway/appointments/
+          filters:
+            - SetPath=/api/appointments
+
         - id: appointment-service
           uri: http://appointment-service:8083
           predicates:
@@ -33,6 +54,13 @@ spring:
             - RewritePath=/gateway/appointments/(?<segment>.*), /api/appointments/${segment}
 
         # ─── Member 4: Pharmacy Service ───────────────────────────────────────
+        - id: pharmacy-service-base
+          uri: http://pharmacy-service:8084
+          predicates:
+            - Path=/gateway/medicines,/gateway/medicines/
+          filters:
+            - SetPath=/api/medicines
+
         - id: pharmacy-service
           uri: http://pharmacy-service:8084
           predicates:
@@ -41,6 +69,13 @@ spring:
             - RewritePath=/gateway/medicines/(?<segment>.*), /api/medicines/${segment}
 
         # ─── Member 5: Billing Service ────────────────────────────────────────
+        - id: billing-service-base
+          uri: http://billing-service:8085
+          predicates:
+            - Path=/gateway/invoices,/gateway/invoices/
+          filters:
+            - SetPath=/api/invoices
+
         - id: billing-service
           uri: http://billing-service:8085
           predicates:
@@ -49,6 +84,13 @@ spring:
             - RewritePath=/gateway/invoices/(?<segment>.*), /api/invoices/${segment}
 
         # ─── Member 6: Lab Test Service ───────────────────────────────────────
+        - id: labtest-service-base
+          uri: http://labtest-service:8086
+          predicates:
+            - Path=/gateway/labtests,/gateway/labtests/
+          filters:
+            - SetPath=/api/labtests
+
         - id: labtest-service
           uri: http://labtest-service:8086
           predicates:
@@ -119,6 +161,8 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     urls:
+      - name: All Services (Unified)
+        url: /v3/api-docs/all-services
       - name: Patient Service
         url: /patient-docs/api-docs
       - name: Doctor Service
