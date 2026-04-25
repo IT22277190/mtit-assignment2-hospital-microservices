@@ -1,5 +1,5 @@
 # 🏥 MediCore Hospital Management System
-## IT4020 Modern Topics in IT : Assignment 2 | SLIIT 2026
+## IT4020 Modern Topics in IT - Assignment 2 | SLIIT 2026
 
 ---
 
