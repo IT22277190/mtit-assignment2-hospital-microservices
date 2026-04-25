@@ -32,7 +32,7 @@
 
 ---
 
-## 🐳 Docker — One Command Startup
+## 🐳 Docker One Command Startup
 
 ### Prerequisites
 - Docker Desktop installed and running
